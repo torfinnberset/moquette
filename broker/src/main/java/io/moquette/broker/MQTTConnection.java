@@ -376,6 +376,12 @@ final class MQTTConnection {
                 connAckPropertiesBuilder.serverKeepAlive(brokerConfig.getServerKeepAlive().get());
             }
 
+            // State the limit the decoder already enforces [MQTT-3.2.2-15]. Without it a client that
+            // honours Maximum Packet Size has no way to learn the broker's, and either guesses or --
+            // correctly, per [MQTT-3.1.2-24] -- treats the absence as "no limit" and has the packet
+            // dropped by MqttDecoder with nothing on the wire to explain it.
+            connAckPropertiesBuilder.maximumPacketSize(brokerConfig.maximumPacketSize());
+
             final MqttProperties ackProperties = connAckPropertiesBuilder.build();
             connAckBuilder.properties(ackProperties);
         }
