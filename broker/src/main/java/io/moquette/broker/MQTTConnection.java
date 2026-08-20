@@ -781,7 +781,7 @@ final class MQTTConnection {
             dropConnection();
         }
 
-        if (!topic.isEmpty() && topic.headToken().isReserved()) {
+        if (!topic.isEmpty() && topic.headToken().isReserved() && !brokerConfig.isAllowReservedTopicPublish()) {
             LOG.warn("Avoid to publish on topic which contains reserved topic (starts with $)");
             return PostOffice.RouteResult.failed(clientId);
         }

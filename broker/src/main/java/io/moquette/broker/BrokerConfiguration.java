@@ -31,6 +31,7 @@ class BrokerConfiguration {
     private final int topicAliasMaximum;
     // The packet size the MqttDecoder is already configured to accept, so that CONNACK can state it.
     private final int maximumPacketSize;
+    private final boolean allowReservedTopicPublish;
     // integer max value means that the property is unset
     private int receiveMaximum;
     private Optional<Integer> serverKeepAlive = Optional.empty();
@@ -78,6 +79,8 @@ class BrokerConfiguration {
         // Not a new setting: this is the limit the MqttDecoder already enforces, read here only so
         // that the MQTT 5 CONNACK can state it. A client that respects Maximum Packet Size cannot
         // discover it otherwise, and finds out by having its packet dropped by the decoder instead.
+        allowReservedTopicPublish = props.boolProp(IConfig.ALLOW_RESERVED_TOPIC_PUBLISH_PROPERTY_NAME, false);
+
         maximumPacketSize = props.intProp(IConfig.NETTY_MAX_BYTES_PROPERTY_NAME,
             IConfig.DEFAULT_NETTY_MAX_BYTES_IN_MESSAGE);
 
@@ -119,6 +122,7 @@ class BrokerConfiguration {
         this.receiveMaximum = receiveMaximum;
         this.topicAliasMaximum = topicAliasMaximum;
         this.maximumPacketSize = IConfig.DEFAULT_NETTY_MAX_BYTES_IN_MESSAGE;
+        this.allowReservedTopicPublish = false;
     }
 
     public boolean isAllowAnonymous() {
@@ -147,6 +151,10 @@ class BrokerConfiguration {
 
     public int topicAliasMaximum() {
         return topicAliasMaximum;
+    }
+
+    public boolean isAllowReservedTopicPublish() {
+        return allowReservedTopicPublish;
     }
 
     public int maximumPacketSize() {
