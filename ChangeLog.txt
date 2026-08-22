@@ -1,6 +1,7 @@
 Version 0.18.2-SNAPSHOT:
    [feature] InterceptPublishMessage exposes the MQTT properties of the intercepted PUBLISH message. (#918)
    [fix] A second connect message sent on an already connected client must close the connection as a protocol error. (#969)
+   [fix] A PUBLISH received before the connection is established closes the connection instead of throwing a NullPointerException.
     
 Version 0.18.1:
    [fix] Add a length max to the session queues, this avoids that a slow ACK-ing subscriber consumes too much resources if a fast publisher is sending to same topic.
